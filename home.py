@@ -43,12 +43,12 @@ class App(object):
         self.program_frame = Tk.Toplevel()
         self.program_frame.geometry("500x220")
         self.program_frame.title(self.frame_title)
-        add_btn = Tk.Button(self.program_frame, text="Add new email?", command=self.open_add_new_email_frame)
+        add_btn = Tk.Button(self.program_frame, text="Add new email?",font=("", 20),fg='green',bg='black', command=self.open_add_new_email_frame)
         add_btn.pack()
-        search_btn = Tk.Button(self.program_frame, text="search for email?", command=self.open_search_for_mail_frame)
+        search_btn = Tk.Button(self.program_frame, text="search for email?",font=("", 19), fg='green',bg='black',command=self.open_search_for_mail_frame)
         search_btn.pack()
         handler = lambda: self.onCloseOtherFrame(self.program_frame)
-        logout_btn = Tk.Button(self.program_frame, text="logout", command=handler)
+        logout_btn = Tk.Button(self.program_frame,font=("", 15), text="logout",fg='red', command=handler)
         logout_btn.pack()
 
     def open_Register_Frame(self):
@@ -73,8 +73,6 @@ class App(object):
     def login(self):
         username = self.login_username.get()
         password = self.login_password.get()
-        print username
-        print password
         print self.var1.get()  # 1 if remember me clicked, 0 for not remember me.
         check = self.user.login(username, password)
         if check == "valid":
@@ -111,8 +109,11 @@ class App(object):
     def submit_email(self):
         if self.user.add_email(self.category.get(), self.username.get(), self.password.get()):
             tkMessageBox.showinfo("success", "your data has been submitted successfully")
+            self.username.delete(0, Tk.END)
+            self.password.delete(0, Tk.END)
+            self.category.delete(0, Tk.END)
         else:
-            tkMessageBox.showinfo("failed", "some Errors occured please try again!")
+            tkMessageBox.showinfo("fa   iled", "some Errors occured please try again!")
 
     def mine_destroy(self, frame):
         frame.destroy()
@@ -123,20 +124,27 @@ class App(object):
         self.program_frame.deiconify()
 
     def open_search_for_mail_frame(self):
-        self.categories = {'facebook','google','twitter'}
+        self.categories = self.user.load_categories()
         self.program_frame.withdraw()
+        self.var = Tk.StringVar(self.program_frame)
+        self.var.set(self.categories[0])  # initial value
         self.search_email_frame = Tk.Toplevel()
         self.search_email_frame.title(self.frame_title)
         self.search_email_frame.geometry("500x220")
-        self.comboBox = Tk.OptionMenu(self.search_email_frame,"hello",*self.categories)
+        self.comboBox = Tk.OptionMenu(self.search_email_frame,self.var,*self.categories)
         Tk.Label(self.search_email_frame, text="Choose category").pack(padx=15,pady=15)
         self.comboBox.pack(padx=15,pady=16)
         self.comboBox.configure(width=10)
-        get_btn = Tk.Button(self.search_email_frame,text="Get")
+        get_btn = Tk.Button(self.search_email_frame,text="Get",command=self.get_data)
         get_btn.pack()
         handler = lambda: self.mine_destroy(self.search_email_frame)
         back_btn = Tk.Button(self.search_email_frame, text="back", command=handler)
         back_btn.pack()
+
+    def get_data(self):
+        category = self.var.get()
+        data = self.user.get_data(category)
+        tkMessageBox.showinfo("HAH, here it's", "UserName : "+data[1]+"\n"+"password : "+data[2])
 
     def save_register_data(self):
         username = self.user_name_entry.get(0, Tk.END)

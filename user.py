@@ -35,13 +35,39 @@ class User:
     def add_email(self, category, email, password):
         try:
             f = open('user_mails', 'a')
-            os.chmod('user_mails', 000)
+            #os.chmod('user_mails', 000)
         except IOError:
             return False
-        data = category.strip() + '\t' + email.strip() + '\t' + password.strip() + '\n'
-        f.write(self.encrypt_data(data))
+        data = category.strip() + '\t' + email.strip() + '\t' + password.strip()
+        f.write(self.encrypt_data(data)+'\n')
         f.close()
         return True
 
+    def get_data(self,category):
+        try:
+            f = open('user_mails', 'r')
+        except IOError:
+            return False
+        data = f.readlines()
+        data = [x.strip() for x in data]
+        for word in data:
+         line_data = base64.b64decode(word).split('\t')
+         if category == line_data[0]:
+             return line_data
+
     def encrypt_data(self, str):
         return base64.b64encode(str)
+
+    def load_categories(self):
+        categories = []
+        try:
+            f = open('user_mails', 'r')
+        except IOError:
+            return False
+        data = f.readlines()
+        data = [x.strip() for x in data]
+        for word in data:
+         line_data = base64.b64decode(word).split('\t')
+         categories.append(line_data[0])
+        return categories
+
