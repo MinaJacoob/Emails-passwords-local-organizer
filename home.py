@@ -16,6 +16,7 @@ class App(object):
     def __init__(self, parent):
         self.var1 = Tk.IntVar()
         self.frame_title = "Emails Repository"
+        self.frame_size = "500x220"
         self.root = parent
         self.root.title(self.frame_title)
         self.frame = Tk.Frame(parent)
@@ -41,20 +42,20 @@ class App(object):
     def open_program_Frame(self):
         self.hide()
         self.program_frame = Tk.Toplevel()
-        self.program_frame.geometry("500x220")
+        self.program_frame.geometry(self.frame_size)
         self.program_frame.title(self.frame_title)
         add_btn = Tk.Button(self.program_frame, text="Add new email?",font=("", 20),fg='green',bg='black', command=self.open_add_new_email_frame)
-        add_btn.pack()
+        add_btn.pack(pady=13)
         search_btn = Tk.Button(self.program_frame, text="search for email?",font=("", 19), fg='green',bg='black',command=self.open_search_for_mail_frame)
-        search_btn.pack()
+        search_btn.pack(pady=15)
         handler = lambda: self.onCloseOtherFrame(self.program_frame)
         logout_btn = Tk.Button(self.program_frame,font=("", 15), text="logout",fg='red', command=handler)
-        logout_btn.pack()
+        logout_btn.pack(pady=17)
 
     def open_Register_Frame(self):
         self.hide()
         about_team_Frame = Tk.Toplevel()
-        about_team_Frame.geometry("500x220")
+        about_team_Frame.geometry(self.frame_size)
         about_team_Frame.title("otherFrame")
         userName_label = Tk.Label(about_team_Frame, text="Enter user_name", fg="blue", font=("Helvetica", 16))
         userName_label.pack()
@@ -87,7 +88,7 @@ class App(object):
         self.program_frame.withdraw()
         self.new_email_frame = Tk.Toplevel()
         self.new_email_frame.title(self.frame_title)
-        self.new_email_frame.geometry("500x220")
+        self.new_email_frame.geometry(self.frame_size)
         category = Tk.Label(self.new_email_frame, text="Category")
         category.pack()
         self.category = Tk.Entry(self.new_email_frame, )
@@ -130,15 +131,15 @@ class App(object):
         self.var.set(self.categories[0])  # initial value
         self.search_email_frame = Tk.Toplevel()
         self.search_email_frame.title(self.frame_title)
-        self.search_email_frame.geometry("500x220")
+        self.search_email_frame.geometry(self.frame_size)
         self.comboBox = Tk.OptionMenu(self.search_email_frame,self.var,*self.categories)
         Tk.Label(self.search_email_frame, text="Choose category").pack(padx=15,pady=15)
         self.comboBox.pack(padx=15,pady=16)
         self.comboBox.configure(width=10)
-        get_btn = Tk.Button(self.search_email_frame,text="Get",command=self.get_data)
+        get_btn = Tk.Button(self.search_email_frame,text="Get",font=("",15),fg="green",bg="black",command=self.get_data)
         get_btn.pack()
         handler = lambda: self.mine_destroy(self.search_email_frame)
-        back_btn = Tk.Button(self.search_email_frame, text="back", command=handler)
+        back_btn = Tk.Button(self.search_email_frame,font=("",15),fg="red",bg="black", text="back", command=handler)
         back_btn.pack()
 
     def get_data(self):
@@ -162,25 +163,6 @@ class App(object):
     def show(self):
         self.root.update()
         self.root.deiconify()
-
-    def open_login_Frame(self):
-        self.hide()
-        otherFrame = Tk.Toplevel()
-        otherFrame.geometry("300x200")
-        otherFrame.title("Login")
-        username = Tk.Label(otherFrame, text="Enter user name")
-        username.pack()
-        self.login_username = Tk.Entry(otherFrame, bd=5)
-        self.login_username.pack(padx=15, pady=5)
-        password = Tk.Label(otherFrame, text="Enter password")
-        password.pack()
-        self.login_password = Tk.Entry(otherFrame, bd=5)
-        self.login_password.pack(padx=15, pady=10)
-        handler = lambda: self.onCloseOtherFrame(otherFrame)
-        btn = Tk.Button(otherFrame, text="Back", width=15, command=handler)
-        btn.pack()
-        btn = Tk.Button(otherFrame, text="Login", fg='green', width=15, command=self.login)
-        btn.pack()
 
 
 root = Tk.Tk()
