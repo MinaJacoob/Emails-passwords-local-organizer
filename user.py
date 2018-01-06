@@ -1,6 +1,7 @@
 import base64
 import os
 
+
 class User:
     user_data = []
 
@@ -15,11 +16,11 @@ class User:
             return False
         for word in self.user_data:
             f.write(self.encrypt_data(word) + '\n')
-        del self.user_data[:] #delete all element in list
+        del self.user_data[:]  # delete all element in list
         f.close()
         return True
 
-    def login(self,username,password):
+    def login(self, username, password):
         try:
             f = open('user_data', 'r')
         except IOError:
@@ -27,17 +28,18 @@ class User:
         data = f.readlines()
         data = [x.strip() for x in data]
         if self.encrypt_data(username) == data[0] and self.encrypt_data(password) == data[1]:
-                return "valid"
+            return "valid"
         else:
-                return "Invalid"
-    def add_email(self,category,email,password):
+            return "Invalid"
+
+    def add_email(self, category, email, password):
         try:
             f = open('user_mails', 'a')
-            os.chmod('user_mails',000)
+            os.chmod('user_mails', 000)
         except IOError:
             return False
-        data = category.strip()+'\t'+email.strip()+'\t'+password.strip()+'\n'
-        f.write(data)
+        data = category.strip() + '\t' + email.strip() + '\t' + password.strip() + '\n'
+        f.write(self.encrypt_data(data))
         f.close()
         return True
 

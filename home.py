@@ -1,3 +1,4 @@
+import six
 import tkinter as Tk
 from tkinter import messagebox
 from user import *
@@ -19,7 +20,7 @@ class App(object):
         self.root.title(self.frame_title)
         self.frame = Tk.Frame(parent)
         self.frame.pack()
-        username = Tk.Label(parent, text="Enter user name",fg='blue')
+        username = Tk.Label(parent, text="Enter user name", fg='blue')
         username.pack()
         self.login_username = Tk.Entry(parent, bd=3.5)
         self.login_username.pack(padx=15, pady=5)
@@ -27,10 +28,11 @@ class App(object):
         password.pack()
         self.login_password = Tk.Entry(parent, bd=3.5, show="*")
         self.login_password.pack(padx=15, pady=10)
-        login_btn = Tk.Button(parent, text="Login", fg='green',bg='black', width=15, command=self.login)
+        login_btn = Tk.Button(parent, text="Login", fg='green', bg='black', width=15, command=self.login)
         login_btn.pack()
-        register_btn = Tk.Button(parent, text="Register", command=self.open_Register_Frame, bg='red',fg='black', width=15)
-        register_btn.pack(padx=10,pady=10)
+        register_btn = Tk.Button(parent, text="Register", command=self.open_Register_Frame, bg='red', fg='black',
+                                 width=15)
+        register_btn.pack(padx=10, pady=10)
         Tk.Checkbutton(parent, text="Remember me!", variable=self.var1).pack()
 
     def hide(self):
@@ -41,12 +43,12 @@ class App(object):
         self.program_frame = Tk.Toplevel()
         self.program_frame.geometry("500x220")
         self.program_frame.title(self.frame_title)
-        add_btn = Tk.Button(self.program_frame,text="Add new email?",command=self.open_add_new_email_frame)
+        add_btn = Tk.Button(self.program_frame, text="Add new email?", command=self.open_add_new_email_frame)
         add_btn.pack()
-        search_btn = Tk.Button(self.program_frame,text="search for email?",command=self.open_search_for_mail_frame)
+        search_btn = Tk.Button(self.program_frame, text="search for email?", command=self.open_search_for_mail_frame)
         search_btn.pack()
         handler = lambda: self.onCloseOtherFrame(self.program_frame)
-        logout_btn = Tk.Button(self.program_frame,text="logout",command=handler)
+        logout_btn = Tk.Button(self.program_frame, text="logout", command=handler)
         logout_btn.pack()
 
     def open_Register_Frame(self):
@@ -73,7 +75,7 @@ class App(object):
         password = self.login_password.get()
         print username
         print password
-        print self.var1.get() # 1 if remember me clicked, 0 for not remember me.
+        print self.var1.get()  # 1 if remember me clicked, 0 for not remember me.
         check = self.user.login(username, password)
         if check == "valid":
             if self.var1.get() == 0:
@@ -88,30 +90,31 @@ class App(object):
         self.new_email_frame = Tk.Toplevel()
         self.new_email_frame.title(self.frame_title)
         self.new_email_frame.geometry("500x220")
-        category = Tk.Label(self.new_email_frame,text="Category")
+        category = Tk.Label(self.new_email_frame, text="Category")
         category.pack()
-        self.category = Tk.Entry(self.new_email_frame,)
+        self.category = Tk.Entry(self.new_email_frame, )
         self.category.pack()
-        user_name = Tk.Label(self.new_email_frame,text="Username")
+        user_name = Tk.Label(self.new_email_frame, text="Username")
         user_name.pack()
         self.username = Tk.Entry(self.new_email_frame)
         self.username.pack()
-        password = Tk.Label(self.new_email_frame,text="password")
+        password = Tk.Label(self.new_email_frame, text="password")
         password.pack()
-        self.password = Tk.Entry(self.new_email_frame,show="*")
+        self.password = Tk.Entry(self.new_email_frame, show="*")
         self.password.pack()
-        submit_btn = Tk.Button(self.new_email_frame,text="Submit",fg="green",width=10,command=self.submit_email)
+        submit_btn = Tk.Button(self.new_email_frame, text="Submit", fg="green", width=10, command=self.submit_email)
         submit_btn.pack()
         handler = lambda: self.mine_destroy(self.new_email_frame)
-        back_btn = Tk.Button(self.new_email_frame,text="back",width=10,command=handler)
+        back_btn = Tk.Button(self.new_email_frame, text="back", width=10, command=handler)
         back_btn.pack()
 
     def submit_email(self):
-        if self.user.add_email(self.category.get(),self.username.get(),self.password.get()):
+        if self.user.add_email(self.category.get(), self.username.get(), self.password.get()):
             tkMessageBox.showinfo("success", "your data has been submitted successfully")
         else:
             tkMessageBox.showinfo("failed", "some Errors occured please try again!")
-    def mine_destroy(self,frame):
+
+    def mine_destroy(self, frame):
         frame.destroy()
         self.mine_show()
 
@@ -120,10 +123,17 @@ class App(object):
         self.program_frame.deiconify()
 
     def open_search_for_mail_frame(self):
+        self.categories = {'facebook','google','twitter'}
         self.program_frame.withdraw()
         self.search_email_frame = Tk.Toplevel()
         self.search_email_frame.title(self.frame_title)
         self.search_email_frame.geometry("500x220")
+        self.comboBox = Tk.OptionMenu(self.search_email_frame,"hello",*self.categories)
+        Tk.Label(self.search_email_frame, text="Choose category").pack(padx=15,pady=15)
+        self.comboBox.pack(padx=15,pady=16)
+        self.comboBox.configure(width=10)
+        get_btn = Tk.Button(self.search_email_frame,text="Get")
+        get_btn.pack()
         handler = lambda: self.mine_destroy(self.search_email_frame)
         back_btn = Tk.Button(self.search_email_frame, text="back", command=handler)
         back_btn.pack()
